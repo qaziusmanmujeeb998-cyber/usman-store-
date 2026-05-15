@@ -1,0 +1,130 @@
+{
+  "entities": {
+    "Product": {
+      "title": "Product",
+      "description": "Information about a product in the store",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string", "description": "Product name" },
+        "barcode": { "type": "string", "description": "Barcode of the product" },
+        "categoryId": { "type": "string", "description": "ID of the category" },
+        "buyPrice": { "type": "number", "description": "Purchase price" },
+        "sellPrice": { "type": "number", "description": "Selling price" },
+        "stockQuantity": { "type": "number", "description": "Current stock quantity" },
+        "expiryDate": { "type": "string", "format": "date", "description": "Expiry date of the product" },
+        "supplierId": { "type": "string", "description": "ID of the supplier" },
+        "lowStockThreshold": { "type": "number", "description": "Threshold for low stock alerts" }
+      },
+      "required": ["name", "buyPrice", "sellPrice", "stockQuantity"]
+    },
+    "Category": {
+      "title": "Category",
+      "description": "Product categories",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string", "description": "Category name" }
+      },
+      "required": ["name"]
+    },
+    "Supplier": {
+      "title": "Supplier",
+      "description": "Information about suppliers",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string", "description": "Supplier name" },
+        "contact": { "type": "string", "description": "Supplier contact information" },
+        "address": { "type": "string", "description": "Supplier address" }
+      },
+      "required": ["name"]
+    },
+    "Sale": {
+      "title": "Sale",
+      "description": "Information about a sales transaction",
+      "type": "object",
+      "properties": {
+        "customerId": { "type": "string", "description": "ID of the customer" },
+        "totalAmount": { "type": "number", "description": "Total checkout amount" },
+        "discount": { "type": "number", "description": "Discount applied" },
+        "tax": { "type": "number", "description": "Tax applied" },
+        "paymentMethod": { "type": "string", "enum": ["cash", "card"], "description": "Payment method used" },
+        "timestamp": { "type": "string", "format": "date-time", "description": "Time of sale" },
+        "branchId": { "type": "string", "description": "ID of the branch where the sale occurred" },
+        "cashierId": { "type": "string", "description": "ID of the cashier" }
+      },
+      "required": ["totalAmount", "paymentMethod", "timestamp", "branchId"]
+    },
+    "Purchase": {
+      "title": "Purchase",
+      "description": "Records of purchases from suppliers",
+      "type": "object",
+      "properties": {
+        "supplierId": { "type": "string", "description": "ID of the supplier" },
+        "totalAmount": { "type": "number", "description": "Total purchase amount" },
+        "dueAmount": { "type": "number", "description": "Remaining payment due" },
+        "timestamp": { "type": "string", "format": "date-time", "description": "Time of purchase" },
+        "branchId": { "type": "string", "description": "ID of the branch" }
+      },
+      "required": ["totalAmount", "timestamp"]
+    },
+    "Customer": {
+      "title": "Customer",
+      "description": "Customer records",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string", "description": "Customer name" },
+        "contact": { "type": "string", "description": "Customer contact" },
+        "balance": { "type": "number", "description": "Outstanding balance (credit)" },
+        "creditLimit": { "type": "number", "description": "Maximum allowed credit" }
+      },
+      "required": ["name"]
+    },
+    "Expense": {
+      "title": "Expense",
+      "description": "Daily expenses",
+      "type": "object",
+      "properties": {
+        "amount": { "type": "number", "description": "Expense amount" },
+        "description": { "type": "string", "description": "Expense details" },
+        "category": { "type": "string", "description": "Expense category" },
+        "timestamp": { "type": "string", "format": "date-time", "description": "Time of expense" },
+        "branchId": { "type": "string", "description": "ID of the branch" }
+      },
+      "required": ["amount", "description", "timestamp"]
+    },
+    "Branch": {
+      "title": "Branch",
+      "description": "Store branches",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string", "description": "Branch name" },
+        "location": { "type": "string", "description": "Branch location" }
+      },
+      "required": ["name"]
+    },
+    "User": {
+      "title": "User",
+      "description": "Application user profile",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string", "description": "User's full name" },
+        "email": { "type": "string", "description": "User's email" },
+        "role": { "type": "string", "enum": ["Admin", "Manager", "Cashier"], "description": "User's access level" },
+        "branchId": { "type": "string", "description": "ID of the assigned branch" }
+      },
+      "required": ["email", "role"]
+    }
+  },
+  "firestore": {
+    "products": { "schema": "Product", "description": "Collection of products" },
+    "categories": { "schema": "Category", "description": "Collection of categories" },
+    "suppliers": { "schema": "Supplier", "description": "Collection of suppliers" },
+    "sales": { "schema": "Sale", "description": "Collection of sales transactions" },
+    "sales/{saleId}/items": { "schema": "object", "description": "Subcollection for sale line items" },
+    "purchases": { "schema": "Purchase", "description": "Collection of purchase records" },
+    "purchases/{purchaseId}/items": { "schema": "object", "description": "Subcollection for purchase line items" },
+    "customers": { "schema": "Customer", "description": "Collection of customers" },
+    "expenses": { "schema": "Expense", "description": "Collection of expenses" },
+    "branches": { "schema": "Branch", "description": "Collection of branches" },
+    "users": { "schema": "User", "description": "Collection of user profiles" }
+  }
+}
